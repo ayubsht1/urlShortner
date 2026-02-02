@@ -1,0 +1,125 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="row justify-content-center">
+  <div class="col-md-5 col-lg-4">
+
+    <div class="text-center mb-4">
+      <h2 class="fw-bold">Join Linkly</h2>
+      <p class="text-muted">Start creating professional short links today</p>
+    </div>
+
+    <div class="card shadow-sm border-0 p-4">
+      <div class="card-body">
+
+        <form method="post" novalidate>
+          {% csrf_token %}
+
+          {% if form.non_field_errors %}
+            <div class="alert alert-danger mb-3">
+              {{ form.non_field_errors.0 }}
+            </div>
+          {% endif %}
+
+          <!-- Email -->
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Email</label>
+            <input type="email"
+                   name="email"
+                   class="form-control {% if form.email.errors %}is-invalid{% endif %}"
+                   value="{{ form.email.value|default:'' }}"
+                   required>
+
+            {% if form.email.errors %}
+              <div class="invalid-feedback">
+                {{ form.email.errors.0 }}
+              </div>
+            {% endif %}
+          </div>
+
+          <!-- Username -->
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Username</label>
+            <input type="text"
+                   name="username"
+                   class="form-control {% if form.username.errors %}is-invalid{% endif %}"
+                   value="{{ form.username.value|default:'' }}"
+                   required>
+
+            {% if form.username.errors %}
+              <div class="invalid-feedback">
+                {{ form.username.errors.0 }}
+              </div>
+            {% endif %}
+          </div>
+
+          <!-- Password -->
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Password</label>
+            <div class="input-group">
+              <input type="password"
+                     name="password1"
+                     id="password1"
+                     class="form-control {% if form.password1.errors %}is-invalid{% endif %}"
+                     required>
+              <button class="btn btn-outline-secondary" type="button"
+                      onclick="togglePassword('password1','icon1')">
+                <i class="fa-solid fa-eye" id="icon1"></i>
+              </button>
+            </div>
+            {% if form.password1.errors %}
+              <div class="invalid-feedback d-block">
+                {{ form.password1.errors.0 }}
+              </div>
+            {% endif %}
+          </div>
+
+          <!-- Confirm Password -->
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Confirm Password</label>
+            <div class="input-group">
+              <input type="password"
+                     name="password2"
+                     id="password2"
+                     class="form-control {% if form.password2.errors %}is-invalid{% endif %}"
+                     required>
+              <button class="btn btn-outline-secondary" type="button"
+                      onclick="togglePassword('password2','icon2')">
+                <i class="fa-solid fa-eye" id="icon2"></i>
+              </button>
+            </div>
+            {% if form.password2.errors %}
+              <div class="invalid-feedback d-block">
+                {{ form.password2.errors.0 }}
+              </div>
+            {% endif %}
+          </div>
+
+          <button class="btn btn-primary w-100 py-2 mt-2">
+            Create Account
+          </button>
+        </form>
+
+      </div>
+       <p class="text-center mt-4 text-muted small">
+      Already have an account?
+      <a href="{% url 'login' %}" class="fw-semibold text-decoration-none">
+        Log in
+      </a>
+    </p>
+    </div>
+  </div>
+</div>
+
+<script>
+function togglePassword(fieldId, iconId) {
+  const field = document.getElementById(fieldId);
+  const icon = document.getElementById(iconId);
+  const isPassword = field.type === "password";
+  field.type = isPassword ? "text" : "password";
+  icon.classList.toggle("fa-eye");
+  icon.classList.toggle("fa-eye-slash");
+}
+</script>
+
+{% endblock %}

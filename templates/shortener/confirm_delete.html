@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="row justify-content-center py-5">
+    <div class="col-md-5 col-lg-4">
+        <div class="card shadow border-0 overflow-hidden">
+            <div class="card-header bg-danger bg-opacity-10 border-0 py-3 text-center">
+                <i class="fas fa-exclamation-triangle text-danger fa-2x"></i>
+            </div>
+            <div class="card-body p-4 text-center">
+                <h4 class="fw-bold mb-2">Confirm Delete</h4>
+                <p class="text-muted small mb-4">
+                    Are you sure you want to delete the short link:<br>
+                    <span class="fw-bold text-dark">{{ request.get_host }}/r/{{ object.short_key }}</span>?
+                    <br><small class="text-danger mt-2 d-block">This action cannot be undone.</small>
+                </p>
+
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-danger py-2 fw-bold">Delete Permanently</button>
+                        <a href="{% url 'dashboard' %}" class="btn btn-light py-2 text-muted">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

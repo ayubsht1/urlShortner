@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="row justify-content-center py-5">
+    <div class="col-md-6 col-lg-5">
+        <div class="card shadow-sm border-0">
+            <div class="card-body p-4 p-lg-5">
+                <div class="text-center mb-4">
+                    <div class="bg-primary bg-opacity-10 d-inline-block p-3 rounded-circle mb-3">
+                        <i class="fas fa-magic fa-2x text-primary"></i>
+                    </div>
+                    <h3 class="fw-bold">Create Short URL</h3>
+                    <p class="text-muted small">Turn your long links into clean, trackable URLs</p>
+                </div>
+
+                <form method="post" novalidate>
+                    {% csrf_token %}
+
+                    {% if form.non_field_errors %}
+                        {% for error in form.non_field_errors %}
+                            <div class="alert alert-danger small border-0 shadow-sm mb-3">{{ error }}</div>
+                        {% endfor %}
+                    {% endif %}
+
+                    <!-- Original URL -->
+                    <div class="mb-4">
+                        <label for="{{ form.original_url.id_for_label }}" class="form-label small fw-bold text-muted text-uppercase">Original URL</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-end-0 text-muted"><i class="fas fa-link"></i></span>
+                            <input type="url" 
+                                   name="original_url" 
+                                   id="{{ form.original_url.id_for_label }}" 
+                                   class="form-control border-start-0 ps-0 {% if form.original_url.errors %}is-invalid{% endif %}" 
+                                   placeholder="https://example.com/very-long-link"
+                                   value="{{ form.original_url.value|default:'' }}"
+                                   required>
+                        </div>
+                        {% if form.original_url.errors %}
+                            <div class="invalid-feedback d-block small mt-1">{{ form.original_url.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Expiration Date -->
+                    <div class="mb-4">
+                        <label for="{{ form.expires_at.id_for_label }}" class="form-label small fw-bold text-muted text-uppercase">Expires at (Optional)</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-end-0 text-muted"><i class="fas fa-calendar-alt"></i></span>
+                            <input type="datetime-local" 
+                                   name="expires_at" 
+                                   id="{{ form.expires_at.id_for_label }}" 
+                                   class="form-control border-start-0 ps-0 {% if form.expires_at.errors %}is-invalid{% endif %}"
+                                   value="{{ form.expires_at.value|default:'' }}">
+                        </div>
+                        {% if form.expires_at.errors %}
+                            <div class="invalid-feedback d-block small mt-1">{{ form.expires_at.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Custom Key -->
+                    <div class="mb-4">
+                        <label for="{{ form.custom_key.id_for_label }}" class="form-label small fw-bold text-muted text-uppercase">Custom Key (Optional)</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-end-0 text-muted">{{ request.get_host }}/r/</span>
+                            <input type="text" 
+                                   name="custom_key" 
+                                   id="{{ form.custom_key.id_for_label }}" 
+                                   class="form-control border-start-0 ps-0 {% if form.custom_key.errors %}is-invalid{% endif %}" 
+                                   maxlength="10" 
+                                   placeholder="my-link"
+                                   value="{{ form.custom_key.value|default:'' }}">
+                        </div>
+                        <div class="form-text small text-muted">Leave blank for a random sequence.</div>
+                        {% if form.custom_key.errors %}
+                            <div class="invalid-feedback d-block small mt-1">{{ form.custom_key.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="d-grid gap-2 mt-4">
+                        <button type="submit" class="btn btn-primary btn-lg rounded-pill fw-bold shadow-sm">
+                            Shorten Link
+                        </button>
+                        <a href="{% url 'dashboard' %}" class="btn btn-link text-muted text-decoration-none small">
+                            Back to Dashboard
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

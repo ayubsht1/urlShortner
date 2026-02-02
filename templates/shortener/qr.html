@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<style>
+    @media print {
+        @page {
+            margin: 0;
+        }
+        
+        body * {
+            visibility: hidden;
+        }
+
+        #printable-qr, #printable-qr * {
+            visibility: visible;
+        }
+
+        #printable-qr {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: white !important;
+            border: none !important;
+            padding: 0 !important;
+            margin: 0 !important;
+        }
+
+        #printable-qr img {
+            width: 90vmin !important; 
+            height: 90vmin !important;
+            max-width: none !important;
+        }
+
+        .no-print {
+            display: none !important;
+        }
+    }
+</style>
+
+<div class="row justify-content-center py-5">
+    <div class="col-md-5 col-lg-4">
+        <div class="card shadow-sm border-0">
+            <div class="card-body text-center p-4 p-lg-5">
+                
+                <div class="bg-success bg-opacity-10 d-inline-block p-3 rounded-circle mb-4 no-print">
+                    <i class="fas fa-qrcode fa-2x text-success"></i>
+                </div>
+                
+                <h3 class="fw-bold mb-1 no-print">QR Code</h3>
+                <p class="text-muted small mb-4 no-print">Scan the code to access your link</p>
+
+                <!-- The specific container we want to print -->
+                <div id="printable-qr" class="bg-light p-3 rounded-3 mb-4 inline-block border">
+                    <img src="{% url 'qr' object.id %}" 
+                         alt="QR Code" 
+                         class="img-fluid rounded shadow-sm"
+                         style="max-width: 200px;">
+                </div>
+
+                <div class="mb-4 no-print">
+                    <label class="form-label small fw-bold text-muted text-uppercase d-block">Shortened Link</label>
+                    <div class="bg-light py-2 px-3 rounded text-primary fw-medium border">
+                        {{ request.get_host }}/r/{{ object.short_key }}
+                    </div>
+                </div>
+
+                <div class="d-grid gap-2 no-print">
+                    <button onclick="window.print()" class="btn btn-outline-dark rounded-pill btn-sm mb-1">
+                        <i class="fas fa-print me-2"></i>Print QR Code
+                    </button>
+                    <a href="{% url 'dashboard' %}" class="btn btn-link text-muted text-decoration-none small">
+                        Back to Dashboard
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
